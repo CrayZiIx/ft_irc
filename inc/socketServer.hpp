@@ -44,7 +44,7 @@ class Server
         Server();                           
         ~Server();
 
-        void serverInit();                      // server Init
+        void serverInit(char *port_id);                      // server Init
         void serverSocket();                    // SS creation
         void acceptNewClient();                 // Function to accept a new client
         void receiveNewData(int fd);            // receive new data from a registered client

@@ -23,27 +23,20 @@ Server::~Server()
 /* don't detect correctly event receivd by poll                   */
 /*                                                                */
 /******************************************************************/
-// transform vec _pollFd to pollfd * _pollFd
 // send client fd
 
-void Server::serverInit()                       // server Init
+void Server::serverInit(char *port_id)                       // server Init
 {
-    this->_servPort = 7000;
+    this->_servPort = to_int(port_id);
     this->serverSocket();
-
-    // struct pollfd test[5];
 
     std::cout<<GREEN<<"Server is UP"<<WHITE<<std::endl;
     std::cout<<"Waiting a connection..."<<std::endl;
 
     while (Server::__signal == false)
     {
-        // for (size_t i = 0; i < this->_clients.size(); i++)
-        // {  
-            // std::cout<<this->_clients[i].getFd()<<std::endl;
         if ((poll(&_pollFd[0], _pollFd.size(), -1) == -1) && Server::__signal == false) // Wainting for a event
             throw(std::runtime_error("poll() has failed"));
-        // }
         for (size_t i = 0; i < this->_pollFd.size(); i++)
         {
             if (_pollFd[i].events & POLLIN) // check if there is data to read
@@ -51,9 +44,7 @@ void Server::serverInit()                       // server Init
                 if (_pollFd[i].fd == _servSocketFd)
                     this->acceptNewClient(); // accept new client 
                 else
-                {
                     this->receiveNewData(_pollFd[i].fd); // receive new data from a registered client
-                }
             }
         }
     }
@@ -99,8 +90,7 @@ void Server::acceptNewClient()                  // Function to accept a new clie
     struct pollfd newPoll;
     socklen_t len = sizeof(add);
 
-    std::cout<<"accept launch"<<std::endl;
-    int incoFd = accept(_servSocketFd, (sockaddr *)&(add), &len);
+    int incoFd = accept(this->_servSocketFd, (sockaddr *)&(add), &len);
     if (incoFd == -1)
     {
         std::cout<<"accept() has failed !"<<std::endl;
@@ -111,15 +101,15 @@ void Server::acceptNewClient()                  // Function to accept a new clie
         std::cout<<"fcntl() has failed !"<<std::endl;
         return ;
     }
-    std::cout<<"acceptNc"<<std::endl;
     newPoll.fd = incoFd;
     newPoll.events = POLLIN;
     newPoll.revents = 0;
     oneClient.setFd(incoFd);
     oneClient.setIpAddr(inet_ntoa((add.sin_addr)));
     _clients.push_back(oneClient);
+    _pollFd.push_back(newPoll);
 
-    std::cout<<GREEN<<"Client"<<incoFd<<" has been connected"<<WHITE<<std::endl;
+    std::cout<<GREEN<<"Client ["<<incoFd<<"] has been connected"<<WHITE<<std::endl;
     return ;
 }
 
@@ -130,14 +120,16 @@ void Server::receiveNewData(int fd)             // receive new data from a regis
 
     memset(buff, 0, sizeof(buff));
     bytes = recv(fd, buff, sizeof(buff) - 1, 0); // receive the data
-    std::cout<<YELLOW<<"Client ["<<fd<<"] Data :"<<WHITE<<buff;
-    if (bytes <= 0)
+    if (bytes == 0)
     {
-        std::cout<<RED<<"Client has been disconnected"<<WHITE<<std::endl;
+        std::cout<<RED<<"Client ["<<fd<<"] has been disconnected"<<WHITE<<std::endl;
+        for (size_t i = 0; i < _pollFd.size(); i++)
+            if (_pollFd[i].fd == fd)
+                this->_pollFd.erase(this->_pollFd.begin() + i);
         clearClients(fd);
         close(fd);
     }
-    else
+    else if (bytes != -1)
     {
         buff[bytes] = '\0';
         std::cout<<YELLOW<<"Client ["<<fd<<"] Data :"<<WHITE<<buff;
@@ -159,7 +151,6 @@ void Server::closeFds()                        // close Fds, lol
     for (size_t i = 0; i < _clients.size(); i++)
     {
         close(_clients[i].getFd());
-        std::cout<<RED<<"Client ["<<_clients[i].getFd()<<"] : has been disconnected"<<WHITE<<std::endl;
         if (_servSocketFd != 1)
         {
             std::cout<<RED<<"Client ["<<_clients[i].getFd()<<"] : has been disconnected"<<WHITE<<std::endl;
