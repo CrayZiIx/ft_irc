@@ -25,12 +25,12 @@ Server::~Server()
 /******************************************************************/
 // send client fd
 
-void Server::serverInit(char *port_id)                       // server Init
+void Server::serverInit(char **args)                       // server Init
 {
-    this->_servPort = to_int(port_id);
+    this->_servPassword = args[2];
+    this->_servPort = to_int(args[1]);
     this->serverSocket();
 
-    std::cout<<GREEN<<"Server is UP"<<WHITE<<std::endl;
     std::cout<<"Waiting a connection..."<<std::endl;
 
     while (Server::__signal == false)
@@ -66,7 +66,6 @@ void Server::serverSocket()                     // SS creation
     this->_servSocketFd = socket(AF_INET, SOCK_STREAM, 0);  // Create the server socket ? check socket function
     if (this->_servSocketFd == -1)
         throw (std::runtime_error("Failed to Create Socket"));
-    
     if (setsockopt(this->_servSocketFd, SOL_SOCKET, SO_REUSEADDR, &en, sizeof(en)) == -1) // Set the Socket Option (SO_REUSEADDR) to reuse the address
         throw (std::runtime_error("Failed to set option (SO_REUSEADDR) on socket"));
     if (fcntl(this->_servSocketFd, F_SETFL, O_NONBLOCK) == -1) // Set the Socket Option (O_NONBLOCK) for non-blocking socket
@@ -101,6 +100,10 @@ void Server::acceptNewClient()                  // Function to accept a new clie
         std::cout<<"fcntl() has failed !"<<std::endl;
         return ;
     }
+    // TODO:
+    //     wait some cmd from the usr [CAP LS - PASS - NICK - USER]
+    //         if passw isn't
+    //             go fuck his mom
     newPoll.fd = incoFd;
     newPoll.events = POLLIN;
     newPoll.revents = 0;

@@ -35,8 +35,9 @@
 class Server
 {
     private:
-        int _servPort;                          // SP
-        int _servSocketFd;                      // SSFD
+        int _servPort;                          // server port
+        std::string _servPassword;              // server password
+        int _servSocketFd;                      // server socket fd ( 3 cassualy)
         static bool __signal;
         std::vector<Client> _clients;           // vector of clients
         std::vector<struct pollfd> _pollFd;     // vector of pollfd
@@ -44,7 +45,7 @@ class Server
         Server();                           
         ~Server();
 
-        void serverInit(char *port_id);                      // server Init
+        void serverInit(char **args);                      // server Init
         void serverSocket();                    // SS creation
         void acceptNewClient();                 // Function to accept a new client
         void receiveNewData(int fd);            // receive new data from a registered client
