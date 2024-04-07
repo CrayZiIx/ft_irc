@@ -1,4 +1,5 @@
 #include "../inc/socketServer.hpp"
+/*TODO: essayer de la rendre plus lisible cette fonction de mort */
 
 void Server::inviteCommand(std::string &command, int &fd)
 {

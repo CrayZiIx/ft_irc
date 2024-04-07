@@ -16,7 +16,7 @@ SRC_DIR       = src/
 OBJ_DIR       = obj/
 
 CXX           = c++
-CXXFLAGS      = -Wall -Wextra -Werror -std=c++98
+CXXFLAGS      = -Wall -Wextra -Werror -std=c++98 -g
 
 SRC_FILES     = main\
 				socketClient\
@@ -24,6 +24,8 @@ SRC_FILES     = main\
 				utils\
 				join\
 				quit\
+				invite\
+				privmsg\
 				Channel\
 				Authentificate
 

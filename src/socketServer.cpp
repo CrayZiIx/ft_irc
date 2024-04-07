@@ -438,10 +438,10 @@ void Server::parseExecCommand(std::string &command, int fd)
         this->setNickname(command, fd);// maybe bug here !
     else if (commandSplited.size()\
         && (commandSplited[0] == "USER" || commandSplited[0] == "user"))
-        setUsername(command, fd);
+        this->setUsername(command, fd);
     else if (commandSplited.size()\
         && (commandSplited[0] == "QUIT" || commandSplited[0] == "QUIT"))
-        quitCommand(command, fd);
+        this->quitCommand(command, fd);
     else if (notRegistered(fd))
     {
         if (commandSplited.size()\
@@ -449,7 +449,7 @@ void Server::parseExecCommand(std::string &command, int fd)
             std::cout<<commandSplited[0]<<std::endl;// kickCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "JOIN" || commandSplited[0] == "join"))
-            joinCommand(command, fd);
+            this->joinCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "TOPIC" || commandSplited[0] == "topic"))
             std::cout<<commandSplited[0]<<std::endl;//topicCommand(command, fd);
@@ -461,12 +461,12 @@ void Server::parseExecCommand(std::string &command, int fd)
             std::cout<<commandSplited[0]<<std::endl;//partCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "PRIVMSG" || commandSplited[0] == "privmsg"))
-            std::cout<<commandSplited[0]<<std::endl;//privmsgCommand(command, fd);
+            this->privmsgCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "INVITE" || commandSplited[0] == "invite"))
-            inviteCommand(command, fd);
+            this->inviteCommand(command, fd);
         else if (commandSplited.size())
-            sendResponse(fd, ERR_CMDNOTFOUND(this->getClientByFd(fd)->getNickName(), commandSplited[0]));
+            this->sendResponse(fd, ERR_CMDNOTFOUND(this->getClientByFd(fd)->getNickName(), commandSplited[0]));
     }
     else if (!notRegistered(fd))
         this->sendResponse(fd, ERR_NOTREGISTERED(std::string("*"))); 

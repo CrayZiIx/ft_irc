@@ -94,7 +94,11 @@ class Server
         void channelIsntExisting(std::vector<std::pair<std::string, std::string> > &token, int i, int fd);
 
         void inviteCommand(std::string &command, int &fd);
+
         void quitCommand(std::string command, int fd);
+
+        void privmsgCommand(std::string command, int fd);
+        void checkForChannelsClients(std::vector<std::string>  &tmp, int fd);
 
         static void _signalHandler(int signum); // A basic signal handler
 
