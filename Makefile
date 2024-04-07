@@ -21,7 +21,11 @@ CXXFLAGS      = -Wall -Wextra -Werror -std=c++98
 SRC_FILES     = main\
 				socketClient\
 				socketServer\
-				utils
+				utils\
+				join\
+				quit\
+				Channel\
+				Authentificate
 
 
 SRC           = $(addprefix $(SRC_DIR), $(addsuffix .cpp, $(SRC_FILES)))
