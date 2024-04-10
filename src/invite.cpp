@@ -11,9 +11,7 @@ void Server::inviteCommand(std::string &command, int &fd)
         sendError(fd, 461, this->getClientByFd(fd)->getNickName(), " :Not enough parameters"CRLF);
         return ;
     }
-
     std::string channelName = stringCommand[2].substr(1);
-    
     /*ERR_NOSUCHCHANNEL(403) - if the givem channel does not exist*/
     if (stringCommand[2][0] != '#' || !this->getChannelByName(channelName))
     {

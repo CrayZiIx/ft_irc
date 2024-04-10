@@ -87,18 +87,27 @@ class Server
         void setUsername(std::string &command, int fd);
 	    void authentifcateClient(int fd, std::string command);
 
+        /**/
         void joinCommand(std::string command, int fd);
         int joinSplit(std::vector<std::pair<std::string, std::string> > &token, std::string command, int fd);
         int searchClientInChannel(std::string nickName);
         void channelIsExisting(std::vector<std::pair<std::string, std::string> > &token, int i, int j, int fd);
         void channelIsntExisting(std::vector<std::pair<std::string, std::string> > &token, int i, int fd);
 
+        /*INVITE*/
         void inviteCommand(std::string &command, int &fd);
 
+        /*QUIT*/
         void quitCommand(std::string command, int fd);
 
+        /*PRIVMSG*/
         void privmsgCommand(std::string command, int fd);
         void checkForChannelsClients(std::vector<std::string>  &tmp, int fd);
+
+        /*MODE*/
+        std::string mode_Append(std::string array, char oper, char mode);
+        std::vector<std::string> splitParams(std::string params);
+
 
         static void _signalHandler(int signum); // A basic signal handler
 
