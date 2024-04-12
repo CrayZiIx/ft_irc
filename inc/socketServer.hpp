@@ -105,8 +105,29 @@ class Server
         void checkForChannelsClients(std::vector<std::string>  &tmp, int fd);
 
         /*MODE*/
+        /*MODE-MAIN COMMANDS*/
+        void modeCommand(std::string &command, int fd);
+        std::string inviteOnly(Channel *channel, char opera, std::string chain);
+        std::string topicRestriction(Channel *channel, char opera, std::string array);
+        std::string HandlePassword(int fd, std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, std::string array, std::string &arguments);
+        std::string HandleOperatorPrivilege(int fd, std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, std::string array, std::string &arguments);
+        std::string HandleChannelLimits(int fd, std::vector<std::string> tokens, Channel *channel, size_t &pos, char opera, std::string array, std::string &arguments);
+        /*MODE-UTILS*/
         std::string mode_Append(std::string array, char oper, char mode);
+        void getCommandArgs(std::string &command, std::string &name, std::string &modeSet, std::string &params);
         std::vector<std::string> splitParams(std::string params);
+
+        /*KICK*/
+        /*KICK-MAIN COMMAND*/
+        void kickCommand(const std::string &command, int fd);
+        std::string getKickReason(int fd, std::string command, std::vector<std::string> &tmp, std::string &user);
+        
+        
+        /*TOPIC*/
+        /*TOPIC-MAIN COMMAND*/
+        void topicCommand(std::string &command, int fd);
+
+
 
 
         static void _signalHandler(int signum); // A basic signal handler

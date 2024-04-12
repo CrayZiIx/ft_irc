@@ -5,6 +5,7 @@
         "stdexcept": "cpp",
         "vector": "cpp",
         "iosfwd": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "sstream": "cpp"
     }
 }

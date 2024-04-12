@@ -24,8 +24,11 @@ SRC_FILES     = main\
 				utils\
 				join\
 				quit\
-				invite\
 				privmsg\
+				mode\
+				kick\
+				topic\
+				invite\
 				Channel\
 				Authentificate
 

@@ -15,6 +15,7 @@ void Server::inviteCommand(std::string &command, int &fd)
     /*ERR_NOSUCHCHANNEL(403) - if the givem channel does not exist*/
     if (stringCommand[2][0] != '#' || !this->getChannelByName(channelName))
     {
+        std::cout<<"testing and "<<stringCommand[2][0]<<"and"<<this->getChannelByName(channelName)<<std::endl;
         sendError(fd, 403, channelName, " :No such channel"CRLF);
         return ;
     }

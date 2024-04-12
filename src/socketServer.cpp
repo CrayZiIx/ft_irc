@@ -446,16 +446,16 @@ void Server::parseExecCommand(std::string &command, int fd)
     {
         if (commandSplited.size()\
             && (commandSplited[0] == "KICK" || commandSplited[0] == "kick"))
-            std::cout<<commandSplited[0]<<std::endl;// kickCommand(command, fd);
+            this->kickCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "JOIN" || commandSplited[0] == "join"))
             this->joinCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "TOPIC" || commandSplited[0] == "topic"))
-            std::cout<<commandSplited[0]<<std::endl;//topicCommand(command, fd);
+            this->topicCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "MODE" || commandSplited[0] == "mode"))
-            std::cout<<commandSplited[0]<<std::endl;//modeCommand(command, fd);
+            this->modeCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "PART" || commandSplited[0] == "part"))
             std::cout<<commandSplited[0]<<std::endl;//partCommand(command, fd);
@@ -464,7 +464,10 @@ void Server::parseExecCommand(std::string &command, int fd)
             this->privmsgCommand(command, fd);
         else if (commandSplited.size()\
             && (commandSplited[0] == "INVITE" || commandSplited[0] == "invite"))
-            this->inviteCommand(command, fd);
+            {
+                std::cout<<"mgl"<<std::endl;
+                this->inviteCommand(command, fd);
+            }
         else if (commandSplited.size())
             this->sendResponse(fd, ERR_CMDNOTFOUND(this->getClientByFd(fd)->getNickName(), commandSplited[0]));
     }
@@ -484,7 +487,7 @@ void Server::closeFds()                        // close Fds, lol
     for (size_t i = 0; i < _clients.size(); i++)
     {
         close(_clients[i].getClientFd());
-        if (_servSocketFd != 1)
+        if (_servSocketFd != -1)
         {
             std::cout<<RED<<"Client ["<<_clients[i].getClientFd()<<"] : has been disconnected"<<WHITE<<std::endl;
             close(_servSocketFd);
